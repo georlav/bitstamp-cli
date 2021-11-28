@@ -1,8 +1,8 @@
 # bitstamp-cli
-A simple cli application to monitor your crypto asset prices at Bitstamp.
+A command line application to monitor your crypto asset prices at Bitstamp.
 
 ## Installing
-You can head at the [releases](https://github.com/georlav/bitstamp-cli/releases) page and grub a version for your OS
+Head at the [releases](https://github.com/georlav/bitstamp-cli/releases) page and grub a version for your OS
 
 If you have go installed run
 ```bash
@@ -26,7 +26,7 @@ Press h to show help menu
  * [georlav/bitstamp](https://github.com/georlav/bitstamp)
 
 ## License
-Distributed under the MIT License. See [LICENSE](LICENCE) for more information.
+Distributed under the MIT License. See [LICENSE](LICENSE) for more information.
 
 ## Contact
 George Lavdanis - georlav@gmail.com
