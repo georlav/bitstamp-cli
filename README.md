@@ -1,6 +1,8 @@
 # bitstamp-cli
 A command line application to monitor your crypto asset prices at Bitstamp.
 
+[![asciicast](https://asciinema.org/a/452113.svg)](https://asciinema.org/a/452113)
+
 ## Installing
 Head at the [releases page](https://github.com/georlav/bitstamp-cli/releases) and download a pre build version for your OS
 
