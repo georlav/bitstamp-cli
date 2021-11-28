@@ -2,7 +2,7 @@
 A command line application to monitor your crypto asset prices at Bitstamp.
 
 ## Installing
-Head at the [releases](https://github.com/georlav/bitstamp-cli/releases) page and grub a version for your OS
+Head at the [releases page](https://github.com/georlav/bitstamp-cli/releases) and download a pre build version for your OS
 
 If you have go installed run
 ```bash
