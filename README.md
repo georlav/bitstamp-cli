@@ -2,9 +2,9 @@
 A simple cli application to monitor your crypto asset prices at Bitstamp.
 
 ## Install
-If you have go installed you can install cli using
+If you have go installed run
 ```bash
-go install github.com/georlav/bitstamp-cli
+go install github.com/georlav/bitstamp-cli@latest
 ```
 
 ## Usage
@@ -20,11 +20,11 @@ Press h to show help menu
 
 
 ## Build with
- * [bitstamp](https://github.com/georlav/bitstamp)
- * [termui](https://github.com/gizak/termui)
+ * [gizak/termui](https://github.com/gizak/termui)
+ * [georlav/bitstamp](https://github.com/georlav/bitstamp)
 
 ## License
-Distributed under the MIT License. See `LICENSE` for more information.
+Distributed under the MIT License. See [LICENSE](LICENCE) for more information.
 
 ## Contact
 George Lavdanis - georlav@gmail.com

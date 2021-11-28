@@ -16,6 +16,8 @@ import (
 	"github.com/gizak/termui/v3/widgets"
 )
 
+var version = "untagged"
+
 func main() {
 	var (
 		bitClient                      = bitstamp.NewHTTPAPI()

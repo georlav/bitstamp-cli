@@ -1,0 +1,56 @@
+name: Create Release
+
+on:
+  push:
+    # Sequence of patterns matched against refs/tags
+    tags:
+      - 'v*' # Push events to matching v*, i.e. v1.0, v20.15.10
+
+jobs:
+  build:
+    name: Create release
+    runs-on: ubuntu-latest
+    env:
+      GO111MODULE: "auto"
+    strategy:
+      matrix:
+        include:
+          - os: linux
+            arch: amd64
+          - os: darwin
+            arch: amd64
+          - os: windows
+            arch: amd64
+
+    steps:
+      - name: Install GO
+        uses: actions/setup-go@v2
+        with:
+          go-version: 1.17
+
+      - name: Checkout repository
+        uses: actions/checkout@v2
+
+      - name: Get version tag
+        id: get_version
+        run: echo ::set-output name=VERSION::${GITHUB_REF#refs/tags/}
+
+      - name: Build
+        env:
+          GOOS: ${{ matrix.os }}
+          GOARCH: ${{ matrix.arch }}
+        id: build
+        run: |
+          go build -o bitstamp-cli -ldflags "-X main.version=${{ steps.get_version.outputs.VERSION }}"
+          zip -m bitstamp-cli-${{ matrix.os }}-${{ matrix.arch }}.zip bitstamp-cli
+          echo ::set-output name=FILENAME::bitstamp-cli-${{ matrix.os }}-${{ matrix.arch }}
+
+      - name: Upload binaries to release
+        uses: svenstaro/upload-release-action@v2
+        with:
+          repo_token: ${{ secrets.GITHUBTOKEN }}
+          file: ${{ steps.build.outputs.FILENAME }}.zip
+          asset_name: ${{ steps.build.outputs.FILENAME }}
+          tag: ${{ github.ref }}
+          overwrite: true
+          body: "bitstamp-cli ${{ steps.get_version.outputs.VERSION }} ${{ steps.build.outputs.FILENAME }}"
