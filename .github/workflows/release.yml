@@ -11,15 +11,18 @@ jobs:
     name: Create release
     runs-on: ubuntu-latest
     env:
-      GO111MODULE: "auto"
+      GO111MODULE: "on"
     strategy:
       matrix:
         include:
+          - os: windows
+            artifact_name: bitstamp-cli.exe
+            arch: amd64
           - os: linux
+            artifact_name: bitstamp-cli
             arch: amd64
           - os: darwin
-            arch: amd64
-          - os: windows
+            artifact_name: bitstamp-cli
             arch: amd64
 
     steps:
@@ -36,21 +39,24 @@ jobs:
         run: echo ::set-output name=VERSION::${GITHUB_REF#refs/tags/}
 
       - name: Build
+        id: build
         env:
           GOOS: ${{ matrix.os }}
           GOARCH: ${{ matrix.arch }}
-        id: build
         run: |
-          go build -o bitstamp-cli -ldflags "-X main.version=${{ steps.get_version.outputs.VERSION }}"
-          zip -m bitstamp-cli-${{ matrix.os }}-${{ matrix.arch }}.zip bitstamp-cli
-          echo ::set-output name=FILENAME::bitstamp-cli-${{ matrix.os }}-${{ matrix.arch }}
+          echo ${{ matrix.artifact_name }}
+          echo ${{ steps.get_version.outputs.VERSION }}
+          go build -o ${{ matrix.artifact_name }} -ldflags "-X main.version=${{ steps.get_version.outputs.VERSION }}"
+          zip -m bitstamp-cli-${{ matrix.os }}-${{ matrix.arch }}.zip ${{ matrix.artifact_name }}
+          echo ::set-output name=FILENAME::bitstamp-cli-${{ matrix.os }}-${{ matrix.arch }}.zip
+          ls -la
 
       - name: Upload binaries to release
         uses: svenstaro/upload-release-action@v2
         with:
           repo_token: ${{ secrets.GITHUBTOKEN }}
-          file: ${{ steps.build.outputs.FILENAME }}.zip
+          file: ${{ steps.build.outputs.FILENAME }}
           asset_name: ${{ steps.build.outputs.FILENAME }}
-          tag: ${{ github.ref }}
+          tag: ${{ steps.get_version.outputs.VERSION }}
           overwrite: true
           body: "bitstamp-cli ${{ steps.get_version.outputs.VERSION }} ${{ steps.build.outputs.FILENAME }}"
