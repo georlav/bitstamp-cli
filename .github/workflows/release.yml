@@ -2,16 +2,16 @@ name: Create Release
 
 on:
   push:
-    # Sequence of patterns matched against refs/tags
-    tags:
-      - 'v*' # Push events to matching v*, i.e. v1.0, v20.15.10
+    # # Sequence of patterns matched against refs/tags
+    # tags:
+    #   - 'v*' # Push events to matching v*, i.e. v1.0, v20.15.10
 
 jobs:
   build:
     name: Create release
     runs-on: ubuntu-latest
     env:
-      GO111MODULE: "auto"
+      GO111MODULE: "on"
     strategy:
       matrix:
         include:
@@ -41,7 +41,8 @@ jobs:
           GOARCH: ${{ matrix.arch }}
         id: build
         run: |
-          go build -o bitstamp-cli -ldflags "-X main.version=${{ steps.get_version.outputs.VERSION }}"
+          echo ${GITHUB_REF##*/}
+          go build -ldflags "-X main.version=${{ steps.get_version.outputs.VERSION }}"
           zip -m bitstamp-cli-${{ matrix.os }}-${{ matrix.arch }}.zip bitstamp-cli
           echo ::set-output name=FILENAME::bitstamp-cli-${{ matrix.os }}-${{ matrix.arch }}
 
