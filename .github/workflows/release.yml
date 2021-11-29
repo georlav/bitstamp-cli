@@ -59,4 +59,4 @@ jobs:
           asset_name: ${{ steps.build.outputs.FILENAME }}
           tag: ${{ steps.get_version.outputs.VERSION }}
           overwrite: true
-          body: "bitstamp-cli ${{ steps.get_version.outputs.VERSION }} ${{ steps.build.outputs.FILENAME }}"
+          body: "bitstamp-cli ${{ steps.get_version.outputs.VERSION }}"
