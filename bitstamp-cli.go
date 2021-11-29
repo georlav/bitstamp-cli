@@ -86,8 +86,6 @@ func main() {
 
 	chart := widgets.NewPlot()
 	chart.Title = "| Chart (1h) |"
-	chart.Data = make([][]float64, 1)
-	chart.Data[0] = []float64{1, 1, 1, 1}
 	chart.AxesColor = ui.ColorClear
 	chart.LineColors[0] = ui.ColorGreen
 	chart.BorderStyle = borderStyle
@@ -97,18 +95,26 @@ func main() {
 	updateChartData := func() {
 		result, err := bitClient.GetOHLCData(ctx, activePair.Get(), bitstamp.GetOHLCDataRequest{
 			Step:  3600,
-			Limit: 48,
+			Limit: 72,
 		})
 		terminateOnError("failed to retrieve pair OHCL data", err)
 
-		ps := make([]float64, 0, len(result.Data.Ohlc))
+		var (
+			ps  = make([]float64, 0, len(result.Data.Ohlc))
+			max = 0.0
+		)
+
 		for i := range result.Data.Ohlc {
 			close, _ := strconv.ParseFloat(result.Data.Ohlc[i].Close, 64)
+			if close > max {
+				max = close
+			}
+
 			ps = append(ps, close)
 		}
 
 		chart.Lock()
-		chart.Data[0] = ps
+		chart.Data = [][]float64{ps}
 		chart.Unlock()
 	}
 
@@ -200,6 +206,8 @@ func main() {
 		{"Select next pair", "down, w, mouse wheel down"},
 		{"Show/Hide this menu", "h"},
 		{"Quit", "q"},
+		{"", ""},
+		{"App version", version},
 	}
 	help.TextAlignment = 1
 	help.TextStyle = textStyle
